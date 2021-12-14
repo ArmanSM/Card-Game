@@ -2,13 +2,8 @@ package poker;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
 
 import poker.Card.Rank;
 import poker.Card.Suit; 
@@ -23,14 +18,12 @@ public class Player {
 	private double chipTotal = 0.0; // total # of chips that a player has (not counting anything in live pots)
 	private int handType = 0; // 0-High, 1-pair, 2- 2 pair, 3- 3 kind, 4- straight, 5 - flush, 6 - full house, 7 - 4 kind (sets value after the river from lowest high card to straight flush)
 	
-	ArrayList<Rank> highCards = new ArrayList<Rank>(); // stores the high cards or kickers (for hands that are made w/fewer than 5 cards)
-    ArrayList<Rank> pairs = new ArrayList<Rank>();  // stores the pairs
-    ArrayList<Rank> threes = new ArrayList<Rank>(); // stores 3 of a kinds
-    ArrayList<Rank> fullHouse = new ArrayList<Rank>(); // stores full houses
-    ArrayList<Rank> fours = new ArrayList<Rank>(); // stores four of a kinds
+    private ArrayList<Rank> pairs = new ArrayList<Rank>();  // stores the pairs
+    private ArrayList<Rank> threes = new ArrayList<Rank>(); // stores 3 of a kinds
+    private ArrayList<Rank> fours = new ArrayList<Rank>(); // stores four of a kinds
     
-    ArrayList<Card> finalCards = new ArrayList<Card>(); // (used in pair-type hands)
-    ArrayList<Rank> finalHandRanks = new ArrayList<Rank>(); // stores the hand so aces full of kings is AAAKK, pair of aces could be A A 10 9 2 (kickers in descending order)
+    private ArrayList<Card> finalCards = new ArrayList<Card>(); // Stores the final 7 cards for each player (2 pocket plus 5 CC's) 
+    private ArrayList<Rank> finalHandRanks = new ArrayList<Rank>(); // stores the hand ranks so aces full of kings is AAAKK, pair of aces could be A A 10 9 2 (kickers in descending order)
     
     // CONSTRUCTOR
 	public Player(double startingChips) { 
@@ -39,14 +32,8 @@ public class Player {
 	
 	// GETTERS AND SETTERS
 	
-    public int getPlayerNum () {
-    	return this.playerNum;
-    }
-    
-    public void setPlayerNum (int num) {
-    	this.playerNum = num; 
-    }
-    
+
+	// FOR CARD RELATED INFORMATION
     public Card getCard1() {
     	return this.card1; 
     }
@@ -61,6 +48,33 @@ public class Player {
     
     public void setCard2(Card card) {
     	this.card2 = card; 
+    }
+    
+    public ArrayList<Card> getFinalCards() {
+    	return this.finalCards; 
+    }
+    public ArrayList<Rank> getFinalHandRanks() {
+    	return this.finalHandRanks;
+    }
+    
+    public int getHandType() {
+    	return this.handType;
+    }
+    
+    public void setHandType(int handType) {
+    	this.handType = handType; 
+    }
+    
+    
+    // FOR TURN & GAMEPLAY RELATED INFORMATION
+    
+    
+    public int getPlayerNum () {
+    	return this.playerNum;
+    }
+    
+    public void setPlayerNum (int num) {
+    	this.playerNum = num; 
     }
     
     public boolean getIsTurn() {
@@ -87,44 +101,24 @@ public class Player {
     	this.playerPosition = position; 
     }
     
+    // FOR CHIP INFORMATION
+    
     public double getChipTotal() {
     	return this.chipTotal;
     }
     
-    public void setChipTotal(int chipTotal) {
+    public void setChipTotal(double chipTotal) {
     	this.chipTotal = chipTotal; 
     }
     
-    public int getHandType() {
-    	return this.handType;
-    }
-    
-    public void setHandType(int handType) {
-    	this.handType = handType; 
-    }
-    
+
+    // TO STRING METHOD
     public String toString() {
     	return "player " + playerNum; 
     }
 		
 
-	// adds chips raised to the pot
-	public void raise(double amount) {
-		// throw errors if breaking a raising rule
-		this.chipTotal -= amount; 
-		GameRunner.setChipsInPot(GameRunner.getChipsInPot() + amount); 
-	}
-	// Don't think I need check(), maybe reRaise() TO REVISIT
-	
-	// adds the called chips to the pot
-	public void call (double amount) {
-		this.chipTotal -= amount; 
-		GameRunner.setChipsInPot(GameRunner.getChipsInPot() + amount); 
-	}
-	
-	public void fold() {
-		this.isPlaying = false; 
-	}
+
 	GameRunner gameRunner = new GameRunner();
 	public void setFinalCards() {
 		  finalCards.add(card1); 
@@ -266,7 +260,7 @@ public class Player {
 				  handType = 6;   
 		  }
 	}
-	// finds threes
+	// finds three of a kind's 
 	public void findThreeKind() {
 			  if (threes.size()==1) {
 				  // adds kickers to 4th and 5th slots in list so that Aces w/ KQ kicker will be A, A, A, K, Q
@@ -285,7 +279,7 @@ public class Player {
 				  handType = 3; // if only one 3 of a kind
 			  }
 	  }
-	// For two pair (possibly a third to be removed)
+	// Finds two pair(s) (there might possibly a third to be removed)
 	 public void findTwoPair() {
 		   if (pairs.size()> 1) {
 			  if (pairs.size() == 3) { // remove smallest of the three pairs

@@ -52,7 +52,7 @@ public class HandRank {
 			}
 			else if (players[i].getHandType() == winningPlayer.getHandType() || (!(tiedPlayers.isEmpty()) && players[i].getHandType() == tiedPlayers.get(0).getHandType())) { // checks if hand type is equal to temp winning player(s)
 				for (int n=0; n<5; n++) { // for each card in player (use n for the nth card in their hand. i signifies player number
-					if (players[i].finalHandRanks.get(n).compareTo(winningPlayer.finalHandRanks.get(n))>0) {
+					if (players[i].getFinalHandRanks().get(n).compareTo(winningPlayer.getFinalHandRanks().get(n))>0) {
 						if (tiedPlayers.contains(winningPlayer)) {
 							tiedPlayers.clear(); // new winner so all the "tied players" are losers
 						}
@@ -60,10 +60,10 @@ public class HandRank {
  //                       winningPlayerNum = i+1; // sets player who wins
 						break; // stops checking once definitive winner is found
 					}
-					else if (players[i].finalHandRanks.get(n).compareTo(winningPlayer.finalHandRanks.get(n))<0) {
+					else if (players[i].getFinalHandRanks().get(n).compareTo(winningPlayer.getFinalHandRanks().get(n))<0) {
 						break; // stops checking once definitive winner is found
 					}
-					else if (players[i].finalHandRanks.get(n).compareTo(winningPlayer.finalHandRanks.get(n))==0) {
+					else if (players[i].getFinalHandRanks().get(n).compareTo(winningPlayer.getFinalHandRanks().get(n))==0) {
 						tieCounter++; 
 					}
 					if (tieCounter==5) { // if hand is equal add the two players to the "tied" list

@@ -12,6 +12,8 @@ public class GameRunner {
 	 private static Player[] players; 
 	 
 	 // GETTERS AND SETTERS
+	 
+	 // FOR COMMUNITY CARDS ("CC")
 	 public Card getCC1() {
 		 return GameRunner.CC1; 
 	 }
@@ -68,6 +70,7 @@ public class GameRunner {
 		GameRunner.chipsInPot = chipsInPot;
 	 }
 	  
+	 
 	 public static void main(String args[]) {
 		Deck aDeck = new Deck();  
 		// Sets # of players
@@ -136,8 +139,8 @@ public class GameRunner {
 		 // prints each hand type
 		 for (int i =0; i<players.length; i++) {
 			System.out.println("Player" + (i+1) + ": " + "Hand Type: " + players[i].getHandType());
-			System.out.println("Player" + (i+1) + ": " + "7 cards: " + players[i].finalCards);
-			System.out.println("Player" + (i+1) + ": " + "Final hand ranks: " + players[i].finalHandRanks);
+			System.out.println("Player" + (i+1) + ": " + "7 cards: " + players[i].getFinalCards());
+			System.out.println("Player" + (i+1) + ": " + "Final hand ranks: " + players[i].getFinalHandRanks());
 
 		 }
 		 HandRank.whoWins(); 
