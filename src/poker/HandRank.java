@@ -78,10 +78,10 @@ public class HandRank {
 			}
 		}
 		if (tiedPlayers.size()!=0) {
-			System.out.println("These bitches win " + tiedPlayers); 
+			System.out.println("These People win " + tiedPlayers); 
 		}
 		else {
-		System.out.println("This Bitch wins " + winningPlayer.getPlayerNum()); 
+		System.out.println("This Person wins " + winningPlayer.getPlayerNum()); 
 		}
 	 }
 }
