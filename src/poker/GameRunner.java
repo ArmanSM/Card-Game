@@ -9,6 +9,7 @@ public class GameRunner {
 	 private static double chipsInPot = 0.0; // Amount of chips in the pot (is 0 in between hands) 
 	 private static Scanner scanner = new Scanner( System.in );
 	 private static double startingChips; // Starting Chips
+	 private static double bigBlind; // Big blind must be less than 1/10  the starting chips
 	 private static Player[] players; 
 	 
 	 // GETTERS AND SETTERS
@@ -84,7 +85,11 @@ public class GameRunner {
 		do {
 			System.out.println("Enter starting chip amount for each player: ");
 			startingChips = scanner.nextDouble();
-		} while (startingChips<=0.0); 
+		} while (startingChips<=20.0); 
+		do {
+			System.out.println("Enter the Big Blind amount (Cannot be greater than 1/10 starting chips): ");
+			bigBlind = scanner.nextDouble();
+		} while (bigBlind>startingChips/10); 
 		
 		
 		// Makes array of players, players[0] akin to "player1"
