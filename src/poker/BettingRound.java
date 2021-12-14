@@ -21,6 +21,6 @@ public class BettingRound {
 	}
 	
 	public void fold(Player player) {
-		player.setIsPlaying(false); 
+	//	player.setIsPlaying(false); 
 	}
 }

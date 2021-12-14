@@ -11,9 +11,9 @@ public class Player {
 	private int playerNum; 
 	private Card card1; // each player has two hole cards
 	private Card card2; 
-	private boolean isTurn = false; // is set to true when it's their turn (let's them do raise, call, check, or fold). if (turn) is done in the Runner
-	private boolean isInHand = true; // is set to false when they fold
-	
+//	private boolean isTurn = false; // is set to true when it's their turn (let's them do raise, call, check, or fold). if (turn) is done in the Runner
+//	private boolean isInHand = true; // is set to false when they fold
+	private PlayerState playerState = new PlayingState(); 
 	private int playerPosition = 0; // represents position (starting from BB going to their right) so BB is 0, SB is 1, Dealer is 2, etc
 	private double chipTotal = 0.0; // total # of chips that a player has (not counting anything in live pots)
 	private int handType = 0; // 0-High, 1-pair, 2- 2 pair, 3- 3 kind, 4- straight, 5 - flush, 6 - full house, 7 - 4 kind (sets value after the river from lowest high card to straight flush)
@@ -28,12 +28,25 @@ public class Player {
     // CONSTRUCTOR
 	public Player(double startingChips) { 
 		this.chipTotal = startingChips; 
+		this.playerState = new PlayingState(); 
 	}
 	
 	// GETTERS AND SETTERS
 	
-
+	
+	// FOR STATE MACHINE 
+	public void setState(PlayerState state) {
+		this.playerState = state; 
+	}
+	public void prevState() {
+		playerState.previous(this);
+	}
+	public void nextState() {
+		playerState.next(this); 
+	}
+	
 	// FOR CARD RELATED INFORMATION
+	
     public Card getCard1() {
     	return this.card1; 
     }
@@ -77,21 +90,21 @@ public class Player {
     	this.playerNum = num; 
     }
     
-    public boolean getIsTurn() {
-    	return this.isTurn;
-    }
-    
-    public void setIsTurn(boolean isTurn) {
-    	this.isTurn = isTurn; 
-    }
-    
-    public boolean getIsInHand() {
-    	return this.isInHand;
-    }
-    
-    public void setIsInHand(boolean isInHand) {
-    	this.isInHand = isInHand; 
-    }
+//    public boolean getIsTurn() {
+//    	return this.isTurn;
+//    }
+//    
+//    public void setIsTurn(boolean isTurn) {
+//    	this.isTurn = isTurn; 
+//    }
+//    
+//    public boolean getIsInHand() {
+//    	return this.isInHand;
+//    }
+//    
+//    public void setIsInHand(boolean isInHand) {
+//    	this.isInHand = isInHand; 
+//    }
     
     public int getPlayerPosition() {
     	return this.playerPosition;
