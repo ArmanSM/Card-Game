@@ -12,7 +12,7 @@ public class Player {
 	private Card card1; // each player has two hole cards
 	private Card card2; 
 	private boolean isTurn = false; // is set to true when it's their turn (let's them do raise, call, check, or fold). if (turn) is done in the Runner
-	private boolean isPlaying = true; // is set to false when they fold
+	private boolean isInHand = true; // is set to false when they fold
 	
 	private int playerPosition = 0; // represents position (starting from BB going to their right) so BB is 0, SB is 1, Dealer is 2, etc
 	private double chipTotal = 0.0; // total # of chips that a player has (not counting anything in live pots)
@@ -85,12 +85,12 @@ public class Player {
     	this.isTurn = isTurn; 
     }
     
-    public boolean getIsPlaying() {
-    	return this.isPlaying;
+    public boolean getIsInHand() {
+    	return this.isInHand;
     }
     
-    public void setIsPlaying(boolean isPlaying) {
-    	this.isPlaying = isPlaying; 
+    public void setIsInHand(boolean isInHand) {
+    	this.isInHand = isInHand; 
     }
     
     public int getPlayerPosition() {
