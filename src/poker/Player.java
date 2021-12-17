@@ -31,9 +31,9 @@ public class Player {
 		this.isInHand = true; 
 	}
 	
+	
 	// GETTERS AND SETTERS
 	
-
 	
 	// FOR CARD RELATED INFORMATION
     public Card getCard1() {
@@ -69,7 +69,6 @@ public class Player {
     
     
     // FOR TURN & GAMEPLAY RELATED INFORMATION
-    
     
     public int getPlayerNum () {
     	return this.playerNum;
