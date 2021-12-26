@@ -72,14 +72,15 @@ public class GameRunner {
 	 public static void setChipsInPot(double chipsInPot) {
 		GameRunner.chipsInPot = chipsInPot;
 	 }
-	  
+	 // for flop and onwards. pre-flop betting will start  
 	 public static void bettingRound() {
      	 boolean flag = true; 
      	 while (flag) {
-			double bet = 0;
+			double bet = 0; // amount player is putting in pot
 			double pastRaise = 0; 
 			int noRaiseCounter = 0; // once everyone has either called or checked, this will equal numPlayersInHand and we change rounds
 			for (int i=0; i<players.length; i++) {
+				double minBet = pastRaise==0 ? bigBlind : 2*pastRaise; // min bet is either BB or 2*past bet (1 to call, 1 to raise)
 				
 				if (players[i].getIsInHand()) {
 					players[i].setIsTurn(true); 
@@ -87,39 +88,33 @@ public class GameRunner {
 						System.out.println(players[i].toString() + "WINS"); 
 						break;
 					}
-					int input = 0;
 					do {
-						System.out.println(players[i].toString() + "'s Turn: Enter -1 to fold and 0 to check"); 
-						input = scanner.nextInt();
-					} while (!(input==-1 || input ==0)); 
-	
-					if (input ==-1) { // fold
-						players[i].setIsInHand(false); 
-						numPlayersInHand--; 
-						noRaiseCounter++;
-					}
-					else if (input ==0) noRaiseCounter++; 
+						 System.out.println(players[i].toString() + "'s Turn. Enter amount to bet, 0 to call/check or -1 to fold"); 
+						 bet = scanner.nextDouble(); 
+
+					 } while (!(bet>=minBet || bet==-1 || bet==0)); 
+					
+					  if (bet==0) { // player "calls" the bet
+						  chipsInPot += pastRaise;
+						  players[i].setChipTotal(players[i].getChipTotal()-pastRaise);
+						  noRaiseCounter++;
+					  }
+					  else if (bet==-1) { // player folds
+						  noRaiseCounter++; 
+						  break; 
+					  }
+					  else if (bet>=minBet) { // raise must be equal or greater previous bet. "bet" is total amount placed in pot 
+						  chipsInPot += bet; 
+						  players[i].setChipTotal(players[i].getChipTotal()-bet);
+						  noRaiseCounter = 1; // reset to 1 when someone bets as that person cannot go again unless a raise is made
+					  }
+					pastRaise = bet;
+					bet = 0; 
 				}
 			}
 			if (numPlayersInHand==1) break; 
-//			do {
-//				 System.out.println("Enter amount to raise: "); 
-//				  raise = scanner.nextDouble(); 
-//				  if (bet==pastRaise) { // player "calls" the bet
-//					  noRaiseCounter++;
-//				  }
-//				  else if (bet==-1) { // player folds
-//					  noRaiseCounter++; 
-//					  break; 
-//				  }
-//				  else if (bet>=2*pastRaise && bet>=bigBlind) { // raise must be equal or greater previous raise
-//					  noRaiseCounter = 0; // reset to zero when someone raises
-//				  }
-//			 } while (!(bet>=2*pastRaise && bet>=bigBlind) || bet!=-1);
-//			pastRaise = bet;
-//			bet = 0; 
+
 			if (noRaiseCounter>=numPlayersInHand ) {
-				System.out.println("On a bike: "+ noRaiseCounter);
 				flag = false;
 				break;
 			}
@@ -180,6 +175,9 @@ public class GameRunner {
 		 // deals flop
 		 aDeck.dealFlop(); 
 		 System.out.println("The Flop: " + CC1 + " " + CC2 + " "+ CC3); 
+		 for (int i =0; i<players.length; i++) {
+			System.out.println(players[i].toStringInfo());  // (i+1) makes players[0] come out as player1
+		 }
 		 bettingRound();
 //		 CC1 = new Card(Suit.CLUBS, Rank.FIVE)); 
 //		 CC2 = new Card(Suit.DIAMONDS, Rank.NINE); 
@@ -190,10 +188,16 @@ public class GameRunner {
      	 // deals turn
 		 aDeck.dealTurnOrRiver(CC4); 
 		 System.out.println("The Turn: " + CC4); 
+		 for (int i =0; i<players.length; i++) {
+			System.out.println(players[i].toStringInfo());  // (i+1) makes players[0] come out as player1
+		 }
 		 bettingRound();
 		 // deals river
 		 aDeck.dealTurnOrRiver(CC5); 
 		 System.out.println("The River: " + CC5); 
+		 for (int i =0; i<players.length; i++) {
+			System.out.println(players[i].toStringInfo());  // (i+1) makes players[0] come out as player1
+		 }
 	     bettingRound();
 		 
 		 // assigns final hand

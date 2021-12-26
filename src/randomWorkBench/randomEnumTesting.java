@@ -61,11 +61,11 @@ public class randomEnumTesting {
 		
 		System.out.println("******"); 
 		*/
-		int hoursLate = 5; 
-		int weight = 1187; 
-		double grade = (double) weight/hoursLate; 
-		System.out.println(grade); 
+		double pastRaise = 44; 
+		double bigBlind = 3; 
+		double minBet = pastRaise==0 ? bigBlind : 2*pastRaise; // min bet is either BB or 2*past bet (1 to call, 1 to raise)
 
+		System.out.println(minBet); 
 		
 	/*	if (someRanks.get(2).compareTo(someRanks.get(4))>0 && Rank3.compareTo(Rank2)>0) {
 			System.out.println("fuck yes"); 
