@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class HandRank {
 
-	 public static void assignHand() {
+	 public void assignHand() {
 		 GameRunner gameRunner = new GameRunner(); 
 		 Player[] players = gameRunner.getPlayers();
 		 for (Player player : players) {
@@ -34,7 +34,7 @@ public class HandRank {
 				}	
 		 }
 	 }
-	 public static void whoWins() {
+	 public void whoWins() {
 		GameRunner gameRunner = new GameRunner(); 
 		Player[] players = gameRunner.getPlayers();
 		Player winningPlayer = players[0]; // the "winning" player defaults to first one

@@ -115,7 +115,12 @@ public class Player {
 
     // TO STRING METHOD
     public String toString() {
-    	return "player " + playerNum; 
+    	return "Player " + playerNum + " "; 
+    }
+    
+    // TO STRING METHOD (With their Cards)
+    public String toStringInfo() {
+    	return "Player " + playerNum + ": " + this.card1 + " " + this.card2 + " Stack: " + this.chipTotal; 
     }
 		
 
@@ -434,7 +439,6 @@ public class Player {
 	//	ArrayList<Rank> toRemove = new ArrayList<Rank>(); 
 		int numSequentialCards = 1; // since we only need 5 of the 7 cards to be sequential we can have up to 2 cards that don't work 
 		int lowStraightCounter = 1; 
-		
 		
 		for (Card card : finalCards) {
 			if (!straightRanks.contains(card.rank)) {

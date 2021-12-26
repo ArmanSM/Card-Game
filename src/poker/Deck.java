@@ -10,11 +10,13 @@ public class Deck {
    public ArrayList<Card> deckOfCards = new ArrayList<Card>(); 
    private GameRunner gameRunner = new GameRunner(); 
    
- // makes the deck
+ // CONSTRUCTOR
 	public Deck() {
 		for (Suit suit: Suit.values()) {
 			for (Rank rank : Rank.values()) {
-				deckOfCards.add(new Card(suit, rank)); 
+				if (rank.ordinal()!=0 && rank.ordinal()!=14) { // ignore placeholder values
+					deckOfCards.add(new Card(suit, rank)); 
+				}
 			}
 		}
 	}
@@ -23,9 +25,9 @@ public class Deck {
 		Random rand = new Random(); 
 
 		// make random Integer (object that changes every time)
-		 int randomNum; 
+		// int randomNum; 
 		 for (int i=51; i>0; i--) {
-			 randomNum = rand.nextInt(i+1); // j <-- random integer such that 0 <= j <= i
+			int randomNum = rand.nextInt(i+1); // j <-- random integer such that 0 <= j <= i
 	         Card randomCard = deckOfCards.get(randomNum);  // randomCard is intermediate var
 	         deckOfCards.set(randomNum, deckOfCards.get(i));
 	         deckOfCards.set(i, randomCard );    // swap a[j] and a[i]  using intermediate var
