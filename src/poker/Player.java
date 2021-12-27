@@ -1,6 +1,7 @@
 package poker;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ public class Player {
 	private Card card2; 
 	private boolean isTurn = false; // is set to true when it's their turn (let's them do raise, call, check, or fold). if (turn) is done in the Runner
 	private boolean isInHand = true; // is set to false when they fold
-	private int playerPosition = 0; // represents position (starting from BB going to their right) so BB is 0, SB is 1, Dealer is 2, etc
+	private int playerPosition = 0; // represents position (starting from BB going to their right) so SB is 0, BB is 1, UTG is 2, etc
 	private double chipTotal = 0.0; // total # of chips that a player has (not counting anything in live pots)
 	private int handType = 0; // 0-High, 1-pair, 2- 2 pair, 3- 3 kind, 4- straight, 5 - flush, 6 - full house, 7 - 4 kind (sets value after the river from lowest high card to straight flush)
 	
@@ -122,8 +123,6 @@ public class Player {
     public String toStringInfo() {
     	return "Player " + playerNum + ": " + this.card1 + " " + this.card2 + " Stack: " + this.chipTotal; 
     }
-		
-
 
 	GameRunner gameRunner = new GameRunner();
 	public void setFinalCards() {
