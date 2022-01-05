@@ -116,12 +116,12 @@ public class Player {
 
     // TO STRING METHOD
     public String toString() {
-    	return "Player " + playerNum + " "; 
+    	return "Player " + this.playerNum + " (" + this.playerPosition + ")"; 
     }
     
     // TO STRING METHOD (With their Cards)
     public String toStringInfo() {
-    	return "Player " + playerNum + ": " + this.card1 + " " + this.card2 + " Stack: " + this.chipTotal; 
+    	return "Player " + this.playerNum + ": " + this.card1 + " " + this.card2 + " Stack: " + this.chipTotal; 
     }
 
 	GameRunner gameRunner = new GameRunner();

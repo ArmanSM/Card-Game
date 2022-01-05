@@ -87,54 +87,75 @@ public class GameRunner {
 			 players[0].setChipTotal(players[0].getChipTotal()-(bigBlind/2)); 
 		 }
      	 boolean flag = true; 
+     	 double bet = 0; // amount player is putting in pot
+		 double minBet = 0; 
+		 double pastRaise = 0; 
+		 int noRaiseCounter = 0; // once everyone has either called or checked, this will equal numPlayersInHand and we change rounds
      	 while (flag) {
-			double bet = 0; // amount player is putting in pot
-			double pastRaise = 0; 
-			int noRaiseCounter = 0; // once everyone has either called or checked, this will equal numPlayersInHand and we change rounds
+			
 			// start at Small Blind, end at Dealer (who has greatest position) 
 			for (int i=0; i<players.length; i++) {
-				int playerIndex = 0; 
 				if (isPreFlop) { // if preflop, start at postion 2, end at pos 1 (BB)
-					playerIndex = (i+2) % players.length; 
+					i = (i+2) % players.length; 
+					pastRaise = pastRaise>bigBlind ? pastRaise : bigBlind; 
+					if (i==0 && pastRaise == bigBlind) {
+						pastRaise = bigBlind/2; 
+					}
+					else if (i==1 && pastRaise == bigBlind) pastRaise = 0; 
 				}
-				double minBet = pastRaise==0 ? bigBlind : 2*pastRaise; // min bet is either BB or 2*past bet (1 to call, 1 to raise)
+			
+				if (pastRaise == 0) {
+					minBet = bigBlind; 
+				}
+				else if (pastRaise == bigBlind/2) {
+					minBet = 1.5*bigBlind; 
+				}
+				else {
+					minBet = 2*pastRaise; 
+				}
 				
-				if (players[playerIndex].getIsInHand()) {
-					players[playerIndex].setIsTurn(true); 
+				if (players[i].getIsInHand()) {
+					players[i].setIsTurn(true); 
 					if (numPlayersInHand==1) {
-						System.out.println(players[playerIndex].toString() + "WINS"); 
+						System.out.println(players[i].toString() + "WINS"); 
 						break;
 					}
 					do {
-						 System.out.println(players[playerIndex].toString() + "'s Turn. Enter amount to bet, 0 to call/check or -1 to fold"); 
+						 System.out.println(players[i].toString() + "'s Turn. Enter amount to bet, 0 to call/check or -1 to fold"); 
 						 bet = scanner.nextDouble(); 
 
 					 } while (!(bet>=minBet || bet==-1 || bet==0)); 
 					
 					  if (bet==0) { // player "calls" the bet
 						  chipsInPot += pastRaise;
-						  players[playerIndex].setChipTotal(players[playerIndex].getChipTotal()-pastRaise);
+						  players[i].setChipTotal(players[i].getChipTotal()-pastRaise);
 						  noRaiseCounter++;
+						  System.out.println("FLAG " + noRaiseCounter); 
 					  }
 					  else if (bet==-1) { // player folds
 						  noRaiseCounter++; 
-						  break; 
+						  players[i].setIsInHand(false);
+						  break;  
 					  }
 					  else if (bet>=minBet) { // raise must be equal or greater previous bet. "bet" is total amount placed in pot 
 						  chipsInPot += bet; 
-						  players[playerIndex].setChipTotal(players[playerIndex].getChipTotal()-bet);
+						  players[i].setChipTotal(players[i].getChipTotal()-bet);
 						  noRaiseCounter = 1; // reset to 1 when someone bets as that person cannot go again unless a raise is made
+						  double pastRaisePlaceHolder = pastRaise; 
+						  pastRaise = bet-pastRaisePlaceHolder;
+						  System.out.println("FLAG " + noRaiseCounter); 
+
 					  }
-					pastRaise = bet;
 					bet = 0; 
+					if (numPlayersInHand==1) break; 
+
+					if (noRaiseCounter>=numPlayersInHand ) {
+						flag = false;
+						break;
+					}
 				}
 			}
-			if (numPlayersInHand==1) break; 
-
-			if (noRaiseCounter>=numPlayersInHand ) {
-				flag = false;
-				break;
-			}
+			if (!flag) break; 
      	 }
 	 }
 	 public static void main(String args[]) {
@@ -163,6 +184,7 @@ public class GameRunner {
 		for (int i =0; i<players.length; i++) {
 			players[i] = new Player(startingChips); // gives each player the inputted # of starting chips
 			players[i].setPlayerNum(i+1);
+			players[i].setPlayerPosition(i); 
 		} 
 		// START OF NEW HAND
 		// Shuffles deck and sort players (by position with BB as 0) so they are in correct order for raising
@@ -173,6 +195,7 @@ public class GameRunner {
 		 for (int i =0; i<players.length; i++) {
 			System.out.println(players[i].toStringInfo());  // (i+1) makes players[0] come out as player1
 		 }  
+		 System.out.println("num of players "+numPlayers); 
      	 bettingRound(true); 
 
 		 // deals flop
@@ -181,6 +204,8 @@ public class GameRunner {
 		 for (int i =0; i<players.length; i++) {
 			System.out.println(players[i].toStringInfo());  // (i+1) makes players[0] come out as player1
 		 }
+		 System.out.println("num of players "+numPlayers); 
+
 		 bettingRound(false);
 	 
      	 // deals turn
