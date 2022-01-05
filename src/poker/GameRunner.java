@@ -93,11 +93,14 @@ public class GameRunner {
 		 int noRaiseCounter = 0; // once everyone has either called or checked, this will equal numPlayersInHand and we change rounds
      	 while (flag) {
 			
-			// start at Small Blind, end at Dealer (who has greatest position) 
-			for (int i=0; i<players.length; i++) {
+			// start at Small Blind (0), end at Dealer (who has greatest position) 
+			for (int i=0; i<numPlayers; i++) {
+				int j = i; 
 				if (isPreFlop) { // if preflop, start at postion 2, end at pos 1 (BB)
-					i = (i+2) % players.length; 
-					pastRaise = pastRaise>bigBlind ? pastRaise : bigBlind; 
+					j = (i+2) % numPlayers; 
+					if (pastRaise<=bigBlind) {
+						pastRaise = bigBlind; 
+					}
 					if (i==0 && pastRaise == bigBlind) {
 						pastRaise = bigBlind/2; 
 					}
@@ -114,37 +117,34 @@ public class GameRunner {
 					minBet = 2*pastRaise; 
 				}
 				
-				if (players[i].getIsInHand()) {
-					players[i].setIsTurn(true); 
+				if (players[j].getIsInHand()) {
+					players[j].setIsTurn(true); 
 					if (numPlayersInHand==1) {
-						System.out.println(players[i].toString() + "WINS"); 
+						System.out.println(players[j].toString() + "WINS"); 
 						break;
 					}
 					do {
-						 System.out.println(players[i].toString() + "'s Turn. Enter amount to bet, 0 to call/check or -1 to fold"); 
+						 System.out.println(players[j].toString() + " 's Turn. Enter amount to bet, 0 to call/check or -1 to fold"); 
 						 bet = scanner.nextDouble(); 
 
 					 } while (!(bet>=minBet || bet==-1 || bet==0)); 
 					
 					  if (bet==0) { // player "calls" the bet
 						  chipsInPot += pastRaise;
-						  players[i].setChipTotal(players[i].getChipTotal()-pastRaise);
+						  players[j].setChipTotal(players[j].getChipTotal()-pastRaise);
 						  noRaiseCounter++;
-						  System.out.println("FLAG " + noRaiseCounter); 
 					  }
 					  else if (bet==-1) { // player folds
 						  noRaiseCounter++; 
-						  players[i].setIsInHand(false);
+						  players[j].setIsInHand(false);
 						  break;  
 					  }
 					  else if (bet>=minBet) { // raise must be equal or greater previous bet. "bet" is total amount placed in pot 
 						  chipsInPot += bet; 
-						  players[i].setChipTotal(players[i].getChipTotal()-bet);
+						  players[j].setChipTotal(players[j].getChipTotal()-bet);
 						  noRaiseCounter = 1; // reset to 1 when someone bets as that person cannot go again unless a raise is made
 						  double pastRaisePlaceHolder = pastRaise; 
 						  pastRaise = bet-pastRaisePlaceHolder;
-						  System.out.println("FLAG " + noRaiseCounter); 
-
 					  }
 					bet = 0; 
 					if (numPlayersInHand==1) break; 
